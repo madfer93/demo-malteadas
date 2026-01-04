@@ -1,0 +1,933 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sipote Malteada | Villavicencio, Meta</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        /* LANDING PAGE STYLES */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: linear-gradient(180deg, #fff5f0 0%, #fff0e8 50%, #ffeee5 100%);
+            background-attachment: fixed;
+            overflow-x: hidden;
+        }
+
+        .main-content {
+            background: transparent;
+        }
+
+        /* HERO SECTION */
+        .hero-section {
+            min-height: 70vh;
+            background: linear-gradient(135deg, #ff6b6b 0%, #ff8e53 25%, #ffd93d 50%, #6bcb77 75%, #4d96ff 100%);
+            background-size: 400% 400%;
+            animation: gradientMove 15s ease infinite;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 30px 20px;
+            position: relative;
+        }
+
+        @keyframes gradientMove {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            opacity: 0.5;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .logo-container {
+            margin-bottom: 30px;
+        }
+
+        .logo-placeholder {
+            width: 140px;
+            height: 140px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+            font-size: 3em;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+
+        .hero-title {
+            font-size: 4em;
+            color: white;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.3);
+            margin-bottom: 15px;
+            animation: fadeInUp 1s ease;
+        }
+
+        .hero-slogan {
+            font-size: 1.5em;
+            color: rgba(255,255,255,0.95);
+            margin-bottom: 10px;
+            animation: fadeInUp 1s ease 0.2s both;
+        }
+
+        .hero-location {
+            font-size: 1.1em;
+            color: rgba(255,255,255,0.85);
+            margin-bottom: 40px;
+            animation: fadeInUp 1s ease 0.4s both;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+            animation: fadeInUp 1s ease 0.6s both;
+        }
+
+        .hero-btn {
+            padding: 18px 40px;
+            font-size: 1.2em;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .hero-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+        }
+
+        .btn-menu {
+            background: white;
+            color: #ff6b6b;
+        }
+
+        .btn-whatsapp {
+            background: #25D366;
+            color: white;
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: scrollBounce 2s infinite;
+        }
+
+        .scroll-indicator span {
+            display: block;
+            width: 30px;
+            height: 50px;
+            border: 3px solid white;
+            border-radius: 20px;
+            position: relative;
+        }
+
+        .scroll-indicator span::before {
+            content: '';
+            position: absolute;
+            top: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 6px;
+            height: 10px;
+            background: white;
+            border-radius: 3px;
+            animation: scrollDot 2s infinite;
+        }
+
+        @keyframes scrollBounce {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(10px); }
+        }
+
+        @keyframes scrollDot {
+            0%, 100% { opacity: 1; top: 8px; }
+            50% { opacity: 0.5; top: 20px; }
+        }
+
+        /* OFERTAS SECTION */
+        .offers-section {
+            padding: 40px 20px;
+            background: transparent;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 1.8em;
+            color: #333;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 60px;
+            height: 4px;
+            background: linear-gradient(90deg, #ff6b6b, #ffd93d);
+            margin: 10px auto 0;
+            border-radius: 2px;
+        }
+
+        .offers-slider {
+            max-width: 400px;
+            margin: 0 auto;
+            position: relative;
+            overflow: hidden;
+            border-radius: 25px;
+            box-shadow: 0 15px 50px rgba(255,107,107,0.25);
+        }
+
+        .offers-track {
+            display: flex;
+            transition: transform 0.5s ease;
+        }
+
+        .offer-slide {
+            min-width: 100%;
+            height: 280px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .offer-slide::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.1) 100%);
+        }
+
+        .offer-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            padding: 20px;
+            color: white;
+        }
+
+        .offer-content h3 {
+            font-size: 1.4em;
+            margin-bottom: 6px;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.4);
+        }
+
+        .offer-content p {
+            font-size: 0.9em;
+            opacity: 0.9;
+            margin-bottom: 12px;
+        }
+
+        .offer-btn {
+            background: white;
+            color: #ff6b6b;
+            padding: 10px 25px;
+            border: none;
+            border-radius: 25px;
+            font-size: 0.95em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .offer-btn:hover {
+            background: #ff6b6b;
+            color: white;
+            transform: scale(1.05);
+        }
+
+        .slider-dots {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px;
+            background: linear-gradient(135deg, #ff6b6b, #ff8e53);
+        }
+
+        .slider-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.4);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .slider-dot.active {
+            background: white;
+            transform: scale(1.4);
+        }
+
+        /* DESTACADOS SECTION */
+        .featured-section {
+            padding: 40px 20px;
+            background: transparent;
+        }
+
+        .featured-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 25px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            transition: all 0.4s;
+            position: relative;
+        }
+
+        .product-card:hover {
+            transform: translateY(-15px);
+            box-shadow: 0 25px 60px rgba(0,0,0,0.2);
+        }
+
+        .product-card img {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+        }
+
+        .product-info {
+            padding: 25px;
+            text-align: center;
+        }
+
+        .product-info h3 {
+            font-size: 1.4em;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .product-price {
+            font-size: 1.8em;
+            color: #ff6b6b;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .add-cart-btn {
+            background: linear-gradient(135deg, #ff6b6b, #ff8e53);
+            color: white;
+            padding: 15px 35px;
+            border: none;
+            border-radius: 30px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: all 0.3s;
+            width: 100%;
+        }
+
+        .add-cart-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 30px rgba(255,107,107,0.4);
+        }
+
+        .badge-featured {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: #ffd93d;
+            color: #333;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: bold;
+        }
+
+        /* CTA SECTION */
+        .cta-section {
+            padding: 60px 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            text-align: center;
+            color: white;
+        }
+
+        .cta-section h2 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+        }
+
+        .cta-section p {
+            font-size: 1.3em;
+            opacity: 0.9;
+            margin-bottom: 40px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .cta-btn {
+            padding: 18px 40px;
+            font-size: 1.1em;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .cta-btn:hover {
+            transform: translateY(-5px);
+        }
+
+        .cta-btn.primary {
+            background: white;
+            color: #764ba2;
+        }
+
+        .cta-btn.secondary {
+            background: transparent;
+            color: white;
+            border: 2px solid white;
+        }
+
+        /* INFO SECTION */
+        .info-section {
+            padding: 40px 20px;
+            background: transparent;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .info-card {
+            text-align: center;
+            padding: 30px;
+        }
+
+        .info-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #ff6b6b, #ff8e53);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2em;
+            margin: 0 auto 20px;
+            color: white;
+        }
+
+        .info-card h3 {
+            font-size: 1.3em;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .info-card p {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        /* FOOTER */
+        .footer {
+            background: #1a1a2e;
+            color: white;
+            padding: 30px 20px 20px;
+            text-align: center;
+        }
+
+        .footer-brand {
+            font-size: 2em;
+            margin-bottom: 20px;
+            background: linear-gradient(90deg, #ff6b6b, #ffd93d, #6bcb77);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: rgba(255,255,255,0.7);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: #ff6b6b;
+        }
+
+        .footer-copy {
+            color: rgba(255,255,255,0.5);
+            font-size: 0.9em;
+        }
+
+        .footer-copy a {
+            color: #ff6b6b;
+            text-decoration: none;
+        }
+
+        /* CART STYLES */
+        #mini-cart {
+            position: fixed;
+            bottom: 100px;
+            right: 20px;
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 10px 50px rgba(0,0,0,0.2);
+            width: 320px;
+            max-height: 400px;
+            overflow-y: auto;
+            display: none;
+            z-index: 1000;
+        }
+
+        #mini-cart h3 {
+            color: #ff6b6b;
+            margin-bottom: 15px;
+        }
+
+        #cart-toggle {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #ff6b6b, #ff8e53);
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 1.8em;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 10px 30px rgba(255,107,107,0.5);
+            z-index: 1001;
+            transition: all 0.3s;
+        }
+
+        #cart-toggle:hover {
+            transform: scale(1.1);
+        }
+
+        #cart-count {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: #ffd93d;
+            color: #333;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.6em;
+            font-weight: bold;
+        }
+
+        .mini-cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        #mini-cart-total {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #ff6b6b;
+            padding: 15px 0;
+        }
+
+        #checkout-mini, #clear-cart {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            margin-top: 10px;
+        }
+
+        #checkout-mini {
+            background: #25D366;
+            color: white;
+        }
+
+        #clear-cart {
+            background: #f0f0f0;
+            color: #666;
+        }
+
+        .remove-item {
+            background: #ff6b6b;
+            color: white;
+            border: none;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .hero-title { font-size: 2.5em; }
+            .hero-slogan { font-size: 1.2em; }
+            .hero-btn { padding: 15px 30px; font-size: 1em; }
+            .section-title { font-size: 2em; }
+            .offer-slide { height: 300px; }
+            .offer-content h3 { font-size: 1.5em; }
+        }
+    </style>
+</head>
+<body>
+    <!-- HERO -->
+    <section class="hero-section">
+        <div class="hero-content">
+            <div class="logo-container">
+                <div class="logo-placeholder">&#127846;</div>
+            </div>
+            <h1 class="hero-title">Sipote Malteada</h1>
+            <p class="hero-slogan">Tu dulce favorito hecho malteada</p>
+            <p class="hero-location">Carrera 36A #15-11, Barrio San Benito, Villavicencio, Meta</p>
+            <div class="hero-buttons">
+                <a href="menu.html" class="hero-btn btn-menu">Ver Menu Completo</a>
+                <a href="https://wa.me/573045788873" class="hero-btn btn-whatsapp" target="_blank">Pedir por WhatsApp</a>
+            </div>
+        </div>
+        <div class="scroll-indicator">
+            <span></span>
+        </div>
+    </section>
+
+    <!-- OFERTAS -->
+    <section class="offers-section">
+        <h2 class="section-title">Ofertas del Momento</h2>
+        <div class="offers-slider">
+            <div class="offers-track" id="offers-track">
+                <!-- Slides dinamicos -->
+            </div>
+            <div class="slider-dots" id="slider-dots"></div>
+        </div>
+    </section>
+
+    <!-- DESTACADOS -->
+    <section class="featured-section">
+        <h2 class="section-title">Nuestros Destacados</h2>
+        <div class="featured-grid" id="featured-products">
+            <p style="text-align:center;grid-column:1/-1;color:#666">Cargando productos...</p>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta-section">
+        <h2>Pide desde tu mesa</h2>
+        <p>Escanea el codigo QR en tu mesa y realiza tu pedido sin esperas</p>
+        <div class="cta-buttons">
+            <a href="menu.html" class="cta-btn primary">Ver Menu</a>
+            <a href="https://wa.me/573045788873" class="cta-btn secondary" target="_blank">Contactanos</a>
+        </div>
+    </section>
+
+    <!-- INFO -->
+    <section class="info-section">
+        <div class="info-grid">
+            <div class="info-card">
+                <div class="info-icon">&#128205;</div>
+                <h3>Ubicacion</h3>
+                <p>Carrera 36A #15-11<br>Barrio San Benito<br>Villavicencio, Meta</p>
+            </div>
+            <div class="info-card">
+                <div class="info-icon">&#128222;</div>
+                <h3>Contacto</h3>
+                <p>WhatsApp:<br>304 578 8873</p>
+            </div>
+            <div class="info-card">
+                <div class="info-icon">&#128337;</div>
+                <h3>Horario</h3>
+                <p>Lunes a Sabado<br>10:00 AM - 9:00 PM<br>Domingos: 12:00 - 8:00 PM</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <h3 class="footer-brand">Sipote Malteada</h3>
+        <div class="footer-links">
+            <a href="menu.html">Menu</a>
+            <a href="https://wa.me/573045788873" target="_blank">WhatsApp</a>
+        </div>
+        <p class="footer-copy">
+            2026 Sipote Malteada - Villavicencio, Meta<br>
+            Demo por <a href="https://madfer93.github.io/Perfil-comercial-Manuel/" target="_blank">Variedades JyM</a>
+        </p>
+    </footer>
+
+    <!-- CARRITO -->
+    <div id="mini-cart">
+        <h3>Tu Carrito</h3>
+        <div id="mini-cart-items"></div>
+        <div id="mini-cart-total">Total: $0</div>
+        <button id="checkout-mini" onclick="checkout()">Enviar por WhatsApp</button>
+        <button id="clear-cart" onclick="clearCart()">Vaciar Carrito</button>
+    </div>
+    <button id="cart-toggle" onclick="toggleCart()">
+        &#128722;
+        <span id="cart-count">0</span>
+    </button>
+
+    <script src="js/config.js"></script>
+    <script src="js/supabase.js"></script>
+    <script src="js/cart.js"></script>
+    <script>
+        // Productos destacados
+        async function loadFeatured() {
+            const container = document.getElementById('featured-products');
+
+            try {
+                const { data, error } = await supabase.from('products').select('*');
+
+                console.log('=== DESTACADOS ===');
+                console.log('Total productos:', data ? data.length : 0);
+                if (data) {
+                    console.log('Con featured=true:', data.filter(p => p.featured === true).length);
+                    data.forEach(p => console.log('- ' + p.name + ': featured=' + p.featured + ', available=' + p.available));
+                }
+
+                if (error) {
+                    console.error('Error Supabase:', error);
+                    container.innerHTML = '<p style="text-align:center;grid-column:1/-1;color:#ff6b6b">Error: ' + (error.message || 'Conexion fallida') + '</p>';
+                    return;
+                }
+
+                if (!data || data.length === 0) {
+                    container.innerHTML = '<p style="text-align:center;grid-column:1/-1;color:#999">No hay productos en la base de datos</p>';
+                    return;
+                }
+
+                // Mostrar productos marcados como featured
+                let featured = data.filter(p => p.featured === true && p.available !== false);
+
+                if (featured.length === 0) {
+                    // Fallback: primeros 4 disponibles
+                    featured = data.filter(p => p.available !== false).slice(0, 4);
+                }
+
+                if (featured.length === 0) {
+                    // Ultimo fallback: primeros 4 sin filtro
+                    featured = data.slice(0, 4);
+                }
+
+                console.log('Mostrando:', featured.map(p => p.name).join(', '));
+
+                container.innerHTML = featured.map(p => {
+                    const img = p.image_url || 'https://images.unsplash.com/photo-1572490122747-3968b75cc699?w=400';
+                    return '<div class="product-card">' +
+                        '<span class="badge-featured">Destacado</span>' +
+                        '<img src="' + img + '" alt="' + p.name + '" onerror="this.src=\'https://via.placeholder.com/400x220?text=Sipote\'">' +
+                        '<div class="product-info">' +
+                            '<h3>' + p.name + '</h3>' +
+                            '<p class="product-price">$' + Number(p.price).toLocaleString('es-CO') + '</p>' +
+                            '<button class="add-cart-btn" onclick="addToCart(\'' + p.name.replace(/'/g, '') + '\', ' + p.price + ', 1)">Agregar al Carrito</button>' +
+                        '</div>' +
+                    '</div>';
+                }).join('');
+            } catch (err) {
+                console.error('Error fatal:', err);
+                container.innerHTML = '<p style="text-align:center;grid-column:1/-1;color:#ff6b6b">Error de conexion</p>';
+            }
+        }
+
+        // Ofertas slider
+        let currentSlide = 0;
+        let slidesData = [];
+
+        // Gradientes coloridos tematicos de malteadas
+        const milkshakeGradients = [
+            'linear-gradient(135deg, #ff6b6b 0%, #ff8e53 50%, #ffd93d 100%)', // Fresa-Mango
+            'linear-gradient(135deg, #a855f7 0%, #ec4899 50%, #f472b6 100%)', // Mora-Rosa
+            'linear-gradient(135deg, #4ade80 0%, #22d3ee 50%, #38bdf8 100%)', // Menta-Cielo
+            'linear-gradient(135deg, #fbbf24 0%, #f59e0b 50%, #d97706 100%)', // Mango-Naranja
+            'linear-gradient(135deg, #8b5cf6 0%, #6366f1 50%, #4f46e5 100%)', // Uva-Morado
+            'linear-gradient(135deg, #f43f5e 0%, #fb7185 50%, #fda4af 100%)'  // Cereza-Rosa
+        ];
+
+        async function loadOffers() {
+            const track = document.getElementById('offers-track');
+            const dots = document.getElementById('slider-dots');
+
+            try {
+                const { data: offers, error: offersError } = await supabase.from('offers').select('*');
+                const { data: products } = await supabase.from('products').select('*');
+
+                console.log('=== OFERTAS ===');
+                console.log('Total ofertas:', offers ? offers.length : 0);
+                if (offersError) console.error('Error ofertas:', offersError);
+                if (offers) {
+                    offers.forEach(o => console.log('- ' + o.name + ': available=' + o.available + ', active=' + o.active));
+                }
+
+                // Verificar tanto 'available' como 'active' por compatibilidad
+                const activeOffers = offers ? offers.filter(o => o.available !== false && o.active !== false) : [];
+                console.log('Ofertas activas:', activeOffers.length);
+
+            if (activeOffers.length > 0) {
+                slidesData = activeOffers.map((o, idx) => {
+                    const product = products ? products.find(p => p.id === o.product_id) : null;
+                    const hasImage = o.image_url || (product && product.image_url);
+                    return {
+                        name: o.name,
+                        description: o.description || (product ? product.name + ' con ' + o.discount_percentage + '% OFF' : ''),
+                        image: hasImage ? (o.image_url || product.image_url) : null,
+                        gradient: milkshakeGradients[idx % milkshakeGradients.length],
+                        price: product ? Math.round(product.price * (1 - o.discount_percentage / 100)) : 0,
+                        productName: product ? product.name : o.name,
+                        discount: o.discount_percentage
+                    };
+                });
+            } else if (products && products.length > 0) {
+                // Fallback: mostrar productos disponibles
+                const availableProducts = products.filter(p => p.available !== false).slice(0, 5);
+                slidesData = (availableProducts.length > 0 ? availableProducts : products.slice(0, 5)).map((p, idx) => ({
+                    name: p.name,
+                    description: p.description || 'Delicioso ' + p.name,
+                    image: p.image_url || null,
+                    gradient: milkshakeGradients[idx % milkshakeGradients.length],
+                    price: p.price,
+                    productName: p.name,
+                    discount: 0
+                }));
+            }
+
+            if (slidesData.length === 0) {
+                track.innerHTML = '<div class="offer-slide" style="background:' + milkshakeGradients[0] + '"><div class="offer-content"><span style="font-size:3em;display:block;margin-bottom:10px">&#127846;</span><h3>Sipote Malteada</h3><p>Las mejores malteadas de Villavicencio</p><a href="menu.html" class="offer-btn">Ver Menu</a></div></div>';
+                dots.innerHTML = '<div class="slider-dot active"></div>';
+                return;
+            }
+
+            track.innerHTML = slidesData.map((s, idx) => {
+                const bgStyle = s.image
+                    ? 'background-image:url(' + s.image + ')'
+                    : 'background:' + s.gradient;
+                const discountBadge = s.discount > 0
+                    ? '<span style="position:absolute;top:15px;right:15px;background:#ffd93d;color:#333;padding:8px 16px;border-radius:20px;font-weight:bold;font-size:0.95em;z-index:3">-' + s.discount + '%</span>'
+                    : '';
+                const emoji = !s.image ? '<span style="font-size:3em;display:block;margin-bottom:10px">&#127846;</span>' : '';
+
+                return '<div class="offer-slide" style="' + bgStyle + '">' +
+                    discountBadge +
+                    '<div class="offer-content">' +
+                        emoji +
+                        '<h3>' + s.name + '</h3>' +
+                        '<p>' + s.description + '</p>' +
+                        (s.price ? '<button class="offer-btn" onclick="addToCart(\'' + s.productName.replace(/'/g, '') + '\', ' + s.price + ', 1)">$' + Number(s.price).toLocaleString('es-CO') + ' - Pedir</button>' : '') +
+                    '</div>' +
+                '</div>';
+            }).join('');
+
+            dots.innerHTML = slidesData.map((_, i) =>
+                '<div class="slider-dot' + (i === 0 ? ' active' : '') + '" onclick="goToSlide(' + i + ')"></div>'
+            ).join('');
+
+            // Auto slide
+            setInterval(nextSlide, 8000);
+            } catch (err) {
+                console.error('Error cargando ofertas:', err);
+                track.innerHTML = '<div class="offer-slide" style="background:' + milkshakeGradients[0] + '"><div class="offer-content"><span style="font-size:3em;display:block;margin-bottom:10px">&#127846;</span><h3>Sipote Malteada</h3><p>Las mejores malteadas de Villavicencio</p></div></div>';
+                dots.innerHTML = '<div class="slider-dot active"></div>';
+            }
+        }
+
+        function goToSlide(index) {
+            currentSlide = index;
+            updateSlider();
+        }
+
+        function nextSlide() {
+            currentSlide = (currentSlide + 1) % slidesData.length;
+            updateSlider();
+        }
+
+        function updateSlider() {
+            const track = document.getElementById('offers-track');
+            const dots = document.querySelectorAll('.slider-dot');
+
+            track.style.transform = 'translateX(-' + (currentSlide * 100) + '%)';
+
+            dots.forEach((dot, i) => {
+                dot.classList.toggle('active', i === currentSlide);
+            });
+        }
+
+        // Inicializar
+        loadFeatured();
+        loadOffers();
+    </script>
+</body>
+</html>

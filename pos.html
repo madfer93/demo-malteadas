@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>POS - Sipote Malteada</title>
+    <link rel="stylesheet" href="css/pos.css">
+</head>
+<body class="pos-body">
+    <header class="pos-header">
+        <h1>Punto de Venta</h1>
+        <div class="pos-info">
+            <span id="current-time"></span>
+            <a href="admin.html" class="link-admin">Admin</a>
+            <a href="kitchen.html" class="link-kitchen">Cocina</a>
+        </div>
+    </header>
+
+    <main class="pos-main">
+        <section class="pos-products-section">
+            <div class="pos-categories">
+                <button class="pos-cat active" data-cat="all">Todos</button>
+                <button class="pos-cat" data-cat="malteadas">Malteadas</button>
+                <button class="pos-cat" data-cat="granizados">Granizados</button>
+                <button class="pos-cat" data-cat="comida_rapida">Comida</button>
+                <button class="pos-cat" data-cat="combos">Combos</button>
+                <button class="pos-cat" data-cat="bebidas">Bebidas</button>
+            </div>
+            <div class="pos-products-grid" id="products-grid"></div>
+        </section>
+
+        <section class="pos-cart-section">
+            <div class="cart-header">
+                <h2>Venta Actual</h2>
+                <div class="mesa-input">
+                    <label>Mesa:</label>
+                    <input type="number" id="mesa-number" min="1" max="50" placeholder="#">
+                </div>
+            </div>
+            
+            <div class="cart-items" id="cart-items">
+                <p class="empty-cart">Sin productos</p>
+            </div>
+            
+            <div class="cart-summary">
+                <div class="subtotal">
+                    <span>Subtotal:</span>
+                    <span id="subtotal">$0</span>
+                </div>
+                <div class="total">
+                    <span>TOTAL:</span>
+                    <span id="total">$0</span>
+                </div>
+            </div>
+            
+            <div class="payment-methods">
+                <button class="pay-method active" data-method="efectivo">Efectivo</button>
+                <button class="pay-method" data-method="transferencia">Transfer</button>
+                <button class="pay-method" data-method="tarjeta">Tarjeta</button>
+            </div>
+            
+            <div class="cart-actions">
+                <button class="btn-clear" onclick="clearCart()">Limpiar</button>
+                <button class="btn-pay" onclick="processPayment()">Cobrar</button>
+            </div>
+        </section>
+    </main>
+
+    <div class="modal" id="payment-modal">
+        <div class="modal-content">
+            <h2>Pago Exitoso</h2>
+            <p class="payment-total" id="payment-total">$0</p>
+            <p class="payment-method" id="payment-method-display"></p>
+            <button class="btn-close" onclick="closeModal()">Cerrar</button>
+        </div>
+    </div>
+
+    <script src="js/config.js"></script>
+    <script src="js/supabase.js"></script>
+    <script src="js/pos.js"></script>
+</body>
+</html>

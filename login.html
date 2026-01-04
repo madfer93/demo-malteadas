@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acceso - Sipote Malteada</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #ff6b6b 0%, #ff8e53 25%, #ffd93d 50%, #6bcb77 75%, #4d96ff 100%);
+            background-size: 400% 400%;
+            animation: gradientMove 15s ease infinite;
+        }
+        @keyframes gradientMove {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        .login-container {
+            background: white;
+            padding: 50px 40px;
+            border-radius: 25px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+        }
+        .logo {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, #ff6b6b, #ff8e53);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 25px;
+            font-size: 2.5em;
+        }
+        h1 {
+            color: #333;
+            font-size: 1.8em;
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #eee;
+            border-radius: 12px;
+            font-size: 1em;
+            transition: border-color 0.3s;
+        }
+        .form-group input:focus {
+            border-color: #ff6b6b;
+            outline: none;
+        }
+        .btn-login {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #ff6b6b, #ff8e53);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+        .btn-login:hover {
+            transform: scale(1.02);
+            box-shadow: 0 10px 30px rgba(255,107,107,0.4);
+        }
+        .error-msg {
+            background: #ffebee;
+            color: #c62828;
+            padding: 12px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: none;
+        }
+        .back-link {
+            display: block;
+            margin-top: 25px;
+            color: #666;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            color: #ff6b6b;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="logo">&#127846;</div>
+        <h1>Sipote Admin</h1>
+        <p class="subtitle">Ingresa tus credenciales</p>
+        
+        <div class="error-msg" id="error-msg">Usuario o clave incorrectos</div>
+        
+        <form id="login-form" onsubmit="handleLogin(event)">
+            <div class="form-group">
+                <label>Usuario</label>
+                <input type="text" id="username" required placeholder="Tu usuario">
+            </div>
+            <div class="form-group">
+                <label>Clave</label>
+                <input type="password" id="password" required placeholder="Tu clave">
+            </div>
+            <button type="submit" class="btn-login">Ingresar</button>
+        </form>
+        
+        <a href="index.html" class="back-link">Volver a la tienda</a>
+    </div>
+
+    <script src="js/config.js"></script>
+    <script src="js/supabase.js"></script>
+    <script>
+        // Verificar si ya esta logueado
+        if (sessionStorage.getItem('sipoteUser')) {
+            window.location.href = 'admin.html';
+        }
+
+        async function handleLogin(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value;
+            const errorMsg = document.getElementById('error-msg');
+            
+            errorMsg.style.display = 'none';
+
+            // Buscar usuario en la tabla sellers
+            const { data, error } = await supabase
+                .from('sellers')
+                .select('*')
+                .eq('username', username)
+                .eq('active', true);
+
+            if (error || !data || data.length === 0) {
+                errorMsg.textContent = 'Usuario no encontrado';
+                errorMsg.style.display = 'block';
+                return;
+            }
+
+            const user = data[0];
+
+            // Verificar clave (en produccion usar bcrypt)
+            if (user.password !== password) {
+                errorMsg.textContent = 'Clave incorrecta';
+                errorMsg.style.display = 'block';
+                return;
+            }
+
+            // Guardar sesion
+            sessionStorage.setItem('sipoteUser', JSON.stringify({
+                id: user.id,
+                username: user.username,
+                name: user.name,
+                role: user.role
+            }));
+
+            // Redirigir
+            window.location.href = 'admin.html';
+        }
+    </script>
+</body>
+</html>

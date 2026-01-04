@@ -1,0 +1,241 @@
+/* Kitchen Panel Styles - Sipote Malteada */
+
+.kitchen-body {
+    background: #1a1a2e;
+    min-height: 100vh;
+    color: white;
+    font-family: 'Arial', sans-serif;
+}
+
+.kitchen-header {
+    background: linear-gradient(135deg, #ff6b6b, #ff8e53);
+    padding: 20px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+}
+
+.kitchen-header h1 {
+    font-size: 2em;
+    margin: 0;
+}
+
+.kitchen-stats {
+    display: flex;
+    gap: 30px;
+    font-size: 1.2em;
+}
+
+.kitchen-stats span {
+    background: rgba(255,255,255,0.2);
+    padding: 10px 20px;
+    border-radius: 20px;
+}
+
+.kitchen-main {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    padding: 20px;
+    height: calc(100vh - 100px);
+}
+
+.kitchen-column {
+    background: #16213e;
+    border-radius: 15px;
+    padding: 15px;
+    overflow-y: auto;
+}
+
+.column-title {
+    text-align: center;
+    padding: 15px;
+    border-radius: 10px;
+    margin: 0 0 15px 0;
+    font-size: 1.4em;
+}
+
+.column-title.pending {
+    background: #f5f1f1;
+}
+
+.column-title.preparing {
+    background: #ffa726;
+}
+
+.column-title.ready {
+    background: #66bb6a;
+}
+
+.orders-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.order-card {
+    background: #0f3460;
+    border-radius: 12px;
+    padding: 15px;
+    border-left: 5px solid;
+    animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.order-card.pending {
+    border-left-color: #ff6b6b;
+}
+
+.order-card.preparing {
+    border-left-color: #ffa726;
+}
+
+.order-card.ready {
+    border-left-color: #66bb6a;
+}
+
+.order-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.order-number {
+    font-size: 1.6em;
+    font-weight: bold;
+    color: #ff6b6b;
+}
+
+.order-time {
+    color: #aaa;
+    font-size: 0.9em;
+}
+
+.order-table {
+    background: #e94560;
+    display: inline-block;
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.order-customer {
+    color: #ddd;
+    margin-bottom: 10px;
+    font-size: 1.1em;
+}
+
+.order-items {
+    list-style: none;
+    padding: 0;
+    margin: 10px 0;
+    background: rgba(0,0,0,0.2);
+    border-radius: 8px;
+    padding: 10px 15px;
+}
+
+.order-items li {
+    padding: 5px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.order-items li:last-child {
+    border-bottom: none;
+}
+
+.order-notes {
+    background: #ffa726;
+    color: #333;
+    padding: 8px 12px;
+    border-radius: 8px;
+    margin: 10px 0;
+    font-size: 0.9em;
+}
+
+.order-elapsed {
+    text-align: right;
+    color: #aaa;
+    font-size: 0.85em;
+    margin: 10px 0;
+}
+
+.order-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.order-actions button {
+    flex: 1;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1em;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform 0.2s, opacity 0.2s;
+}
+
+.order-actions button:hover {
+    transform: scale(1.02);
+    opacity: 0.9;
+}
+
+.btn-start {
+    background: #ffa726;
+    color: #333;
+}
+
+.btn-ready {
+    background: #66bb6a;
+    color: white;
+}
+
+.btn-delivered {
+    background: #42a5f5;
+    color: white;
+}
+
+.no-orders {
+    text-align: center;
+    color: #666;
+    padding: 40px 20px;
+    font-size: 1.2em;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+    .kitchen-main {
+        grid-template-columns: 1fr;
+        height: auto;
+    }
+    
+    .kitchen-column {
+        min-height: 300px;
+    }
+}
+
+@media (max-width: 600px) {
+    .kitchen-header {
+        flex-direction: column;
+        gap: 15px;
+        text-align: center;
+    }
+    
+    .kitchen-stats {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+}

@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Sipote Malteada</title>
+    <link rel="stylesheet" href="css/admin.css">
+</head>
+<body class="admin-body">
+    <header class="admin-header">
+        <div class="header-brand">
+            <h1>Sipote Admin</h1>
+            <span class="user-info" id="user-info"></span>
+        </div>
+        <nav class="header-nav">
+            <button class="nav-tab active" data-section="dashboard">Dashboard</button>
+            <button class="nav-tab" data-section="productos">Productos</button>
+            <button class="nav-tab" data-section="destacados">Destacados</button>
+            <button class="nav-tab" data-section="ofertas">Ofertas</button>
+            <button class="nav-tab" data-section="domicilios">Domicilios</button>
+            <button class="nav-tab" data-section="pedidos">Pedidos Mesa</button>
+            <button class="nav-tab" data-section="domiciliarios">Domiciliarios</button>
+            <button class="nav-tab admin-only" data-section="vendedores">Vendedores</button>
+        </nav>
+        <div class="header-links">
+            <a href="pos.html" class="link-pos">POS</a>
+            <a href="kitchen.html" class="link-kitchen">Cocina</a>
+            <a href="qr-generator.html" class="link-qr">QR Mesas</a>
+            <button onclick="logout()" class="link-logout">Salir</button>
+        </div>
+    </header>
+
+    <main class="admin-content">
+        <!-- DASHBOARD -->
+        <section id="dashboard" class="section active">
+            <div class="section-header">
+                <h2>Dashboard</h2>
+                <span class="date-display" id="current-date"></span>
+            </div>
+            <div class="stats-grid">
+                <div class="stat-card orange">
+                    <div class="stat-icon">$</div>
+                    <div class="stat-info">
+                        <h3>Ventas Hoy</h3>
+                        <p id="ventas-hoy">$0</p>
+                    </div>
+                </div>
+                <div class="stat-card blue">
+                    <div class="stat-icon">&#128230;</div>
+                    <div class="stat-info">
+                        <h3>Pedidos Hoy</h3>
+                        <p id="pedidos-hoy">0</p>
+                    </div>
+                </div>
+                <div class="stat-card green">
+                    <div class="stat-icon">&#127828;</div>
+                    <div class="stat-info">
+                        <h3>Productos</h3>
+                        <p id="total-productos">0</p>
+                    </div>
+                </div>
+                <div class="stat-card purple">
+                    <div class="stat-icon">&#128666;</div>
+                    <div class="stat-info">
+                        <h3>Domicilios Hoy</h3>
+                        <p id="domicilios-hoy">0</p>
+                    </div>
+                </div>
+            </div>
+            <div class="dashboard-grid">
+                <div class="dashboard-card">
+                    <h3>Pedidos Recientes</h3>
+                    <div id="recent-orders-list"></div>
+                </div>
+                <div class="dashboard-card">
+                    <h3>Ventas del Mes</h3>
+                    <p class="big-number" id="ventas-mes">$0</p>
+                    <div class="mini-stats">
+                        <span>POS: <strong id="ventas-pos">$0</strong></span>
+                        <span>Online: <strong id="ventas-online">$0</strong></span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PRODUCTOS -->
+        <section id="productos" class="section">
+            <div class="section-header">
+                <h2>Gestionar Productos</h2>
+                <button class="btn-primary" onclick="showProductForm()">+ Nuevo Producto</button>
+            </div>
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Imagen</th>
+                            <th>Nombre</th>
+                            <th>Precio</th>
+                            <th>Categoria</th>
+                            <th>Stock</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="products-table-body"></tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- DESTACADOS -->
+        <section id="destacados" class="section">
+            <div class="section-header">
+                <h2>Productos Destacados</h2>
+                <p class="section-desc">Selecciona hasta 4 productos para mostrar en la pagina principal</p>
+            </div>
+            <div class="featured-manager">
+                <div class="featured-current">
+                    <h3>Destacados Actuales</h3>
+                    <div class="featured-grid" id="current-featured"></div>
+                </div>
+                <div class="featured-available">
+                    <h3>Productos Disponibles</h3>
+                    <div class="products-list" id="available-products"></div>
+                </div>
+            </div>
+
+            <!-- PREVIEW DE COMO SE VE EN INDEX -->
+            <div class="preview-section">
+                <div class="preview-header">
+                    <h3>Vista Previa - Asi se vera en la tienda</h3>
+                    <a href="index.html" target="_blank" class="btn-view-live">Ver Tienda en Vivo</a>
+                </div>
+                <div class="preview-container">
+                    <div class="preview-frame">
+                        <div class="preview-title">Nuestros Destacados</div>
+                        <div class="preview-grid" id="featured-preview"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- OFERTAS -->
+        <section id="ofertas" class="section">
+            <div class="section-header">
+                <h2>Ofertas Especiales</h2>
+                <button class="btn-primary" onclick="showOfferForm()">+ Nueva Oferta</button>
+            </div>
+            <div class="offers-grid" id="offers-grid"></div>
+
+            <!-- PREVIEW DE OFERTAS EN SLIDER -->
+            <div class="preview-section">
+                <div class="preview-header">
+                    <h3>Vista Previa del Slider - Asi se vera en la tienda</h3>
+                    <a href="index.html" target="_blank" class="btn-view-live">Ver Tienda en Vivo</a>
+                </div>
+                <div class="preview-container">
+                    <div class="preview-frame">
+                        <div class="preview-title">Ofertas del Momento</div>
+                        <div class="preview-slider" id="offers-preview">
+                            <div class="preview-slider-track" id="offers-preview-track"></div>
+                            <div class="preview-slider-dots" id="offers-preview-dots"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- DOMICILIOS -->
+        <section id="domicilios" class="section">
+            <div class="section-header">
+                <h2>Pedidos a Domicilio</h2>
+                <div class="delivery-stats">
+                    <span class="stat-badge pending" id="delivery-pending">0 Pendientes</span>
+                    <span class="stat-badge active" id="delivery-active">0 En camino</span>
+                </div>
+            </div>
+            <div class="delivery-columns">
+                <div class="delivery-column">
+                    <h3 class="column-title new">Nuevos</h3>
+                    <div class="delivery-list" id="delivery-new"></div>
+                </div>
+                <div class="delivery-column">
+                    <h3 class="column-title preparing">Preparando</h3>
+                    <div class="delivery-list" id="delivery-preparing"></div>
+                </div>
+                <div class="delivery-column">
+                    <h3 class="column-title onway">En Camino</h3>
+                    <div class="delivery-list" id="delivery-onway"></div>
+                </div>
+                <div class="delivery-column">
+                    <h3 class="column-title delivered">Entregados</h3>
+                    <div class="delivery-list" id="delivery-done"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PEDIDOS MESA -->
+        <section id="pedidos" class="section">
+            <div class="section-header">
+                <h2>Pedidos de Mesa</h2>
+                <div class="orders-filters">
+                    <button class="filter-btn active" data-status="all">Todos</button>
+                    <button class="filter-btn" data-status="nuevo">Nuevos</button>
+                    <button class="filter-btn" data-status="preparando">Preparando</button>
+                    <button class="filter-btn" data-status="listo">Listos</button>
+                </div>
+            </div>
+            <div class="orders-grid" id="orders-grid"></div>
+        </section>
+
+        <!-- DOMICILIARIOS -->
+        <section id="domiciliarios" class="section">
+            <div class="section-header">
+                <h2>Gestionar Domiciliarios</h2>
+                <button class="btn-primary" onclick="showDomiciliarioForm()">+ Nuevo Domiciliario</button>
+            </div>
+            <div class="domiciliarios-stats">
+                <div class="stat-mini available">
+                    <span class="stat-number" id="domiciliarios-disponibles">0</span>
+                    <span class="stat-label">Disponibles</span>
+                </div>
+                <div class="stat-mini busy">
+                    <span class="stat-number" id="domiciliarios-ocupados">0</span>
+                    <span class="stat-label">En ruta</span>
+                </div>
+                <div class="stat-mini total">
+                    <span class="stat-number" id="domiciliarios-total">0</span>
+                    <span class="stat-label">Total</span>
+                </div>
+            </div>
+            <div class="domiciliarios-grid" id="domiciliarios-grid"></div>
+        </section>
+
+        <!-- VENDEDORES -->
+        <section id="vendedores" class="section">
+            <div class="section-header">
+                <h2>Gestionar Vendedores</h2>
+                <button class="btn-primary" onclick="showSellerForm()">+ Nuevo Vendedor</button>
+            </div>
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Usuario</th>
+                            <th>Nombre</th>
+                            <th>Rol</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="sellers-table-body"></tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <!-- MODAL VENDEDOR -->
+    <div class="modal" id="seller-modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal('seller-modal')">&times;</button>
+            <h2 id="seller-modal-title">Nuevo Vendedor</h2>
+            <form id="seller-form" onsubmit="saveSeller(event)">
+                <input type="hidden" id="seller-id">
+                <div class="form-group">
+                    <label>Nombre Completo</label>
+                    <input type="text" id="seller-name" required placeholder="Juan Perez">
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Usuario</label>
+                        <input type="text" id="seller-username" required placeholder="jperez">
+                    </div>
+                    <div class="form-group">
+                        <label>Clave</label>
+                        <input type="password" id="seller-password" placeholder="Dejar vacio para no cambiar">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Rol</label>
+                    <select id="seller-role" required>
+                        <option value="vendedor">Vendedor</option>
+                        <option value="cocina">Cocina</option>
+                        <option value="admin">Administrador</option>
+                    </select>
+                </div>
+                <div class="form-check">
+                    <label><input type="checkbox" id="seller-active" checked> Activo</label>
+                </div>
+                <button type="submit" class="btn-save">Guardar Vendedor</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL PRODUCTO -->
+    <div class="modal" id="product-modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal('product-modal')">&times;</button>
+            <h2 id="product-modal-title">Nuevo Producto</h2>
+            <form id="product-form" onsubmit="saveProduct(event)">
+                <input type="hidden" id="product-id">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Nombre</label>
+                        <input type="text" id="product-name" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Precio</label>
+                        <input type="number" id="product-price" required min="0">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Descripcion</label>
+                    <textarea id="product-description"></textarea>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Categoria</label>
+                        <select id="product-category" required>
+                            <option value="malteadas">Malteadas</option>
+                            <option value="granizados">Granizados</option>
+                            <option value="comida_rapida">Comida Rapida</option>
+                            <option value="combos">Combos</option>
+                            <option value="bebidas">Bebidas</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Stock</label>
+                        <input type="number" id="product-stock" min="0" value="100">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Imagen del Producto</label>
+                    <div id="image-drop-zone" class="image-drop-zone">
+                        <div id="image-preview" class="image-preview"></div>
+                        <div id="drop-text">
+                            <span style="font-size:2em">&#128247;</span><br>
+                            Arrastra una imagen aqui<br>
+                            <small>o haz clic para seleccionar</small>
+                        </div>
+                        <input type="file" id="product-image-file" accept="image/*" style="display:none">
+                    </div>
+                    <input type="hidden" id="product-image">
+                    <small style="color:#666">Tambien puedes pegar una URL directamente:</small>
+                    <input type="url" id="product-image-url" placeholder="https://..." style="margin-top:5px">
+                </div>
+                <div class="form-check">
+                    <label><input type="checkbox" id="product-available" checked> Disponible</label>
+                    <label><input type="checkbox" id="product-featured"> Destacado</label>
+                </div>
+                <button type="submit" class="btn-save">Guardar Producto</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL OFERTA -->
+    <div class="modal" id="offer-modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal('offer-modal')">&times;</button>
+            <h2>Nueva Oferta</h2>
+            <form id="offer-form" onsubmit="saveOffer(event)">
+                <input type="hidden" id="offer-id">
+                <div class="form-group">
+                    <label>Nombre de la Oferta</label>
+                    <input type="text" id="offer-name" required placeholder="Ej: 2x1 en Malteadas">
+                </div>
+                <div class="form-group">
+                    <label>Descripcion</label>
+                    <textarea id="offer-description" placeholder="Descripcion para mostrar en la tienda"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Producto</label>
+                    <select id="offer-product" required></select>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Descuento %</label>
+                        <input type="number" id="offer-discount" min="1" max="100" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Precio Especial (opcional)</label>
+                        <input type="number" id="offer-price" min="0" placeholder="Dejar vacio para usar %">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Fecha Inicio</label>
+                        <input type="date" id="offer-start" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Fecha Fin</label>
+                        <input type="date" id="offer-end" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Imagen Promocional</label>
+                    <div id="offer-image-drop-zone" class="image-drop-zone">
+                        <div id="offer-image-preview" class="image-preview"></div>
+                        <div id="offer-drop-text">
+                            <span style="font-size:2em">&#128247;</span><br>
+                            Arrastra una imagen aqui<br>
+                            <small>o haz clic para seleccionar</small>
+                        </div>
+                        <input type="file" id="offer-image-file" accept="image/*" style="display:none">
+                    </div>
+                    <input type="hidden" id="offer-image">
+                    <small style="color:#666">Tambien puedes pegar una URL directamente:</small>
+                    <input type="url" id="offer-image-url" placeholder="https://..." style="margin-top:5px">
+                </div>
+                <div class="form-check">
+                    <label><input type="checkbox" id="offer-active" checked> Activa</label>
+                    <label><input type="checkbox" id="offer-slider"> Mostrar en Slider</label>
+                </div>
+                <button type="submit" class="btn-save">Guardar Oferta</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL DOMICILIARIO -->
+    <div class="modal" id="domiciliario-modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal('domiciliario-modal')">&times;</button>
+            <h2 id="domiciliario-modal-title">Nuevo Domiciliario</h2>
+            <form id="domiciliario-form" onsubmit="saveDomiciliario(event)">
+                <input type="hidden" id="domiciliario-id">
+                <div class="form-group">
+                    <label>Nombre Completo</label>
+                    <input type="text" id="domiciliario-name" required placeholder="Juan Perez">
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Telefono</label>
+                        <input type="tel" id="domiciliario-phone" required placeholder="300 123 4567">
+                    </div>
+                    <div class="form-group">
+                        <label>Usuario Telegram (opcional)</label>
+                        <input type="text" id="domiciliario-telegram" placeholder="@usuario">
+                    </div>
+                </div>
+                <div class="form-check">
+                    <label><input type="checkbox" id="domiciliario-active" checked> Activo</label>
+                </div>
+                <button type="submit" class="btn-save">Guardar Domiciliario</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL ASIGNAR DOMICILIARIO -->
+    <div class="modal" id="asignar-modal">
+        <div class="modal-content" style="max-width: 400px;">
+            <button class="modal-close" onclick="closeModal('asignar-modal')">&times;</button>
+            <h2>Asignar Domiciliario</h2>
+            <p style="color:#666;margin-bottom:20px">Pedido #<span id="asignar-pedido-id"></span></p>
+            <div id="domiciliarios-disponibles-list"></div>
+            <button type="button" class="btn-save" style="background:#999" onclick="closeModal('asignar-modal')">Cancelar</button>
+        </div>
+    </div>
+
+    <script src="js/config.js"></script>
+    <script src="js/supabase.js"></script>
+    <script src="js/admin.js"></script>
+</body>
+</html>

@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generador QR Mesas - Sipote Malteada</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: Arial, sans-serif; 
+            background: linear-gradient(135deg, #ff9a9a, #fad0c4, #a1c4fd);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container { max-width: 1200px; margin: 0 auto; }
+        header {
+            text-align: center;
+            padding: 30px;
+            background: white;
+            border-radius: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        header h1 { color: #ff6b6b; font-size: 2.5em; margin-bottom: 10px; }
+        header p { color: #666; font-size: 1.2em; }
+        .controls {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+        .control-group { display: flex; align-items: center; gap: 10px; }
+        .control-group label { font-weight: bold; color: #333; }
+        .control-group input {
+            padding: 10px 15px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            font-size: 1em;
+            width: 80px;
+            text-align: center;
+        }
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1.1em;
+            cursor: pointer;
+        }
+        .btn-generate { background: #ff6b6b; color: white; }
+        .btn-print { background: #25D366; color: white; }
+        .base-url { width: 100%; text-align: center; margin-top: 15px; }
+        .base-url input { width: 400px; max-width: 100%; padding: 10px 15px; border: 2px solid #ddd; border-radius: 10px; }
+        .qr-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 25px; }
+        .qr-card {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            text-align: center;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+        .qr-card h3 { color: #ff6b6b; font-size: 1.8em; margin-bottom: 15px; }
+        .qr-card img { width: 180px; height: 180px; margin-bottom: 15px; }
+        .qr-card .url { color: #666; font-size: 0.85em; background: #f5f5f5; padding: 10px; border-radius: 8px; margin-bottom: 15px; word-break: break-all; }
+        .qr-card .btn-download { background: #ff8e53; color: white; padding: 8px 20px; border: none; border-radius: 20px; cursor: pointer; }
+        .back-link { position: fixed; top: 20px; left: 20px; background: white; color: #ff6b6b; text-decoration: none; padding: 10px 20px; border-radius: 25px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        .instructions { background: white; padding: 20px 30px; border-radius: 15px; margin-bottom: 30px; box-shadow: 0 5px 20px rgba(0,0,0,0.1); }
+        .instructions h2 { color: #ff6b6b; margin-bottom: 15px; }
+        .instructions ol { margin-left: 20px; color: #555; line-height: 1.8; }
+        @media print {
+            body { background: white; }
+            .controls, .back-link, .instructions, .btn-download { display: none; }
+            .qr-card { break-inside: avoid; box-shadow: none; border: 2px solid #ddd; }
+        }
+    </style>
+</head>
+<body>
+    <a href="admin.html" class="back-link">Admin</a>
+    <div class="container">
+        <header>
+            <h1>Generador de QR para Mesas</h1>
+            <p>Crea codigos QR para que los clientes pidan desde su mesa</p>
+        </header>
+        <div class="instructions">
+            <h2>Como funciona</h2>
+            <ol>
+                <li>Configura la URL base de tu sitio</li>
+                <li>Selecciona el rango de mesas</li>
+                <li>Haz clic en Generar QR</li>
+                <li>Imprime y coloca en cada mesa</li>
+            </ol>
+        </div>
+        <div class="controls">
+            <div class="control-group">
+                <label>Desde mesa:</label>
+                <input type="number" id="mesa-start" value="1" min="1">
+            </div>
+            <div class="control-group">
+                <label>Hasta mesa:</label>
+                <input type="number" id="mesa-end" value="10" min="1">
+            </div>
+            <button class="btn btn-generate" onclick="generateQRs()">Generar QR</button>
+            <button class="btn btn-print" onclick="window.print()">Imprimir</button>
+            <div class="base-url">
+                <label>URL Base:</label><br><br>
+                <input type="text" id="base-url" value="https://tuusuario.github.io/sipote-malteada-demo">
+            </div>
+        </div>
+        <div class="qr-grid" id="qr-grid"></div>
+    </div>
+    <script>
+        function generateQRs() {
+            var start = parseInt(document.getElementById("mesa-start").value) || 1;
+            var end = parseInt(document.getElementById("mesa-end").value) || 10;
+            var baseUrl = document.getElementById("base-url").value.replace(/\/$/, "");
+            var grid = document.getElementById("qr-grid");
+            if (start > end) { alert("Numero inicial debe ser menor"); return; }
+            if (end - start > 50) { alert("Maximo 50 mesas"); return; }
+            grid.innerHTML = "";
+            for (var mesa = start; mesa <= end; mesa++) {
+                var menuUrl = baseUrl + "/menu.html?mesa=" + mesa;
+                var qrUrl = "https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=" + encodeURIComponent(menuUrl);
+                var card = document.createElement("div");
+                card.className = "qr-card";
+                card.innerHTML = "<h3>Mesa " + mesa + "</h3><img src=\"" + qrUrl + "\" alt=\"QR\"><div class=\"url\">" + menuUrl + "</div><button class=\"btn-download\" onclick=\"downloadQR(" + mesa + ")\">Descargar</button>";
+                grid.appendChild(card);
+            }
+        }
+        function downloadQR(mesa) {
+            var baseUrl = document.getElementById("base-url").value.replace(/\/$/, "");
+            var menuUrl = baseUrl + "/menu.html?mesa=" + mesa;
+            var qrUrl = "https://api.qrserver.com/v1/create-qr-code/?size=400x400&data=" + encodeURIComponent(menuUrl);
+            window.open(qrUrl, "_blank");
+        }
+        document.addEventListener("DOMContentLoaded", generateQRs);
+    </script>
+</body>
+</html>

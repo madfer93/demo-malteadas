@@ -718,13 +718,13 @@
 
     <!-- FOOTER -->
     <footer class="footer">
-        <h3 class="footer-brand">Sipote Malteada</h3>
+        <h3 class="footer-brand">Demo Malteada</h3>
         <div class="footer-links">
             <a href="menu.html">Menu</a>
             <a href="https://wa.me/573045788873" target="_blank">WhatsApp</a>
         </div>
         <p class="footer-copy">
-            2026 Sipote Malteada - Villavicencio, Meta<br>
+            2026 Demo Malteada - Villavicencio, Meta<br>
             Demo por <a href="https://madfer93.github.io/Perfil-comercial-Manuel/" target="_blank">Variedades JyM</a>
         </p>
     </footer>
@@ -790,7 +790,7 @@
                     const img = p.image_url || 'https://images.unsplash.com/photo-1572490122747-3968b75cc699?w=400';
                     return '<div class="product-card">' +
                         '<span class="badge-featured">Destacado</span>' +
-                        '<img src="' + img + '" alt="' + p.name + '" onerror="this.src=\'https://via.placeholder.com/400x220?text=Sipote\'">' +
+                        '<img src="' + img + '" alt="' + p.name + '" onerror="this.src=\'https://via.placeholder.com/400x220?text=Demo\'">' +
                         '<div class="product-info">' +
                             '<h3>' + p.name + '</h3>' +
                             '<p class="product-price">$' + Number(p.price).toLocaleString('es-CO') + '</p>' +
@@ -866,7 +866,7 @@
             }
 
             if (slidesData.length === 0) {
-                track.innerHTML = '<div class="offer-slide" style="background:' + milkshakeGradients[0] + '"><div class="offer-content"><span style="font-size:3em;display:block;margin-bottom:10px">&#127846;</span><h3>Sipote Malteada</h3><p>Las mejores malteadas de Villavicencio</p><a href="menu.html" class="offer-btn">Ver Menu</a></div></div>';
+                track.innerHTML = '<div class="offer-slide" style="background:' + milkshakeGradients[0] + '"><div class="offer-content"><span style="font-size:3em;display:block;margin-bottom:10px">&#127846;</span><h3>Demo Malteada</h3><p>Las mejores malteadas de Villavicencio</p><a href="menu.html" class="offer-btn">Ver Menu</a></div></div>';
                 dots.innerHTML = '<div class="slider-dot active"></div>';
                 return;
             }
@@ -899,7 +899,7 @@
             setInterval(nextSlide, 8000);
             } catch (err) {
                 console.error('Error cargando ofertas:', err);
-                track.innerHTML = '<div class="offer-slide" style="background:' + milkshakeGradients[0] + '"><div class="offer-content"><span style="font-size:3em;display:block;margin-bottom:10px">&#127846;</span><h3>Sipote Malteada</h3><p>Las mejores malteadas de Villavicencio</p></div></div>';
+                track.innerHTML = '<div class="offer-slide" style="background:' + milkshakeGradients[0] + '"><div class="offer-content"><span style="font-size:3em;display:block;margin-bottom:10px">&#127846;</span><h3>Demo Malteada</h3><p>Las mejores malteadas de Villavicencio</p></div></div>';
                 dots.innerHTML = '<div class="slider-dot active"></div>';
             }
         }

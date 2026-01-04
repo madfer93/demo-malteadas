@@ -108,5 +108,9 @@ npx serve .
 - Dashboard con estadisticas
 
 ## Autor
+Manuel Fernando Madrid
+whatsapp +573045788873
+madfer1993@gmail.com
+
 
 Desarrollado por Variedades JyM para Negocios de Malteadas - Villavicencio, Meta, Colombia

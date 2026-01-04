@@ -109,4 +109,4 @@ npx serve .
 
 ## Autor
 
-Desarrollado para Sipote Malteada - Villavicencio, Meta, Colombia
+Desarrollado por Variedades JyM para Negocios de Malteadas - Villavicencio, Meta, Colombia

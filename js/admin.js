@@ -34,6 +34,10 @@ async function sendTelegramNotification(message) {
 }
 
 function formatDeliveryMessage(order) {
+    // Obtener URL base para el link de la app
+    const baseUrl = window.location.origin + window.location.pathname.replace(/\/[^\/]*$/, '');
+    const appLink = `${baseUrl}/domiciliario.html`;
+
     return `🛵 <b>NUEVO PEDIDO A DOMICILIO</b>
 
 📦 <b>Pedido #${order.id}</b>
@@ -42,11 +46,15 @@ function formatDeliveryMessage(order) {
 📍 <b>Direccion:</b>
 ${order.delivery_address || "Sin direccion"}
 
-📞 <b>Telefono:</b> ${order.customer_phone || "Sin telefono"}
+📞 <b>Cliente:</b> ${order.customer_phone || "Sin telefono"}
 
-${order.notes ? `📝 <b>Notas:</b> ${order.notes}` : ""}
+${order.notes ? `📝 <b>Notas:</b> ${order.notes}\n` : ""}
+🗺️ <a href="https://maps.google.com/?q=${encodeURIComponent(order.delivery_address || '')}">Ver en Google Maps</a>
 
-⏰ ${new Date().toLocaleTimeString("es-CO", {hour: "2-digit", minute: "2-digit"})}`;
+⏰ ${new Date().toLocaleTimeString("es-CO", {hour: "2-digit", minute: "2-digit"})}
+
+━━━━━━━━━━━━━━━━
+👉 <a href="${appLink}">Abrir App Domiciliarios</a>`;
 }
 
 // ============ VERIFICAR LOGIN ============
@@ -1288,6 +1296,100 @@ function clearOfferImagePreview() {
     if (urlInput) urlInput.value = "";
 }
 
+// ============ MAPA DE TRACKING ============
+let trackingMap = null;
+let driverMarkers = {};
+
+function initTrackingMap() {
+    const mapContainer = document.getElementById("tracking-map");
+    if (!mapContainer || trackingMap) return;
+
+    // Centrar en Villavicencio, Colombia
+    trackingMap = L.map("tracking-map").setView([4.1420, -73.6266], 13);
+
+    // Capa de OpenStreetMap (gratuito)
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        attribution: '&copy; OpenStreetMap'
+    }).addTo(trackingMap);
+
+    // Marcador del restaurante
+    const restaurantIcon = L.divIcon({
+        className: 'driver-marker',
+        html: '🏪',
+        iconSize: [35, 35],
+        iconAnchor: [17, 17]
+    });
+
+    L.marker([4.1420, -73.6266], { icon: restaurantIcon })
+        .addTo(trackingMap)
+        .bindPopup("<b>Sipote Malteada</b><br>Sede Principal");
+
+    // Cargar ubicaciones de domiciliarios
+    updateMapMarkers();
+}
+
+async function updateMapMarkers() {
+    if (!trackingMap) return;
+
+    // Limpiar marcadores existentes
+    Object.values(driverMarkers).forEach(marker => {
+        trackingMap.removeLayer(marker);
+    });
+    driverMarkers = {};
+
+    // Obtener domiciliarios con ubicacion
+    const driversWithLocation = allDomiciliarios.filter(d =>
+        d.active && d.latitude && d.longitude
+    );
+
+    driversWithLocation.forEach(driver => {
+        const isAvailable = driver.status === "disponible";
+        const emoji = isAvailable ? "🟢" : "🔵";
+
+        const icon = L.divIcon({
+            className: 'driver-marker',
+            html: `<div style="position:relative">🛵<span style="position:absolute;top:-5px;right:-5px;font-size:0.6em">${emoji}</span></div>`,
+            iconSize: [40, 40],
+            iconAnchor: [20, 20]
+        });
+
+        const lastUpdate = driver.last_location_update
+            ? new Date(driver.last_location_update).toLocaleTimeString("es-CO", {hour: "2-digit", minute: "2-digit"})
+            : "Desconocido";
+
+        const statusClass = isAvailable ? "available" : "busy";
+        const statusText = isAvailable ? "Disponible" : "En ruta";
+
+        const marker = L.marker([driver.latitude, driver.longitude], { icon })
+            .addTo(trackingMap)
+            .bindPopup(`
+                <div class="driver-popup">
+                    <h4>${driver.name}</h4>
+                    <span class="status ${statusClass}">${statusText}</span>
+                    <p class="last-update">Ultima actualizacion: ${lastUpdate}</p>
+                    <a href="tel:${driver.phone}" style="color:#25D366">${driver.phone}</a>
+                </div>
+            `);
+
+        driverMarkers[driver.id] = marker;
+    });
+
+    // Si hay domiciliarios, ajustar vista para mostrarlos
+    if (driversWithLocation.length > 0) {
+        const bounds = L.latLngBounds(driversWithLocation.map(d => [d.latitude, d.longitude]));
+        // Agregar el restaurante al bounds
+        bounds.extend([4.1420, -73.6266]);
+        trackingMap.fitBounds(bounds, { padding: [50, 50] });
+    }
+}
+
+function refreshMap() {
+    loadDomiciliarios().then(() => {
+        updateMapMarkers();
+        showToast("Mapa actualizado", "success");
+    });
+}
+
 // ============ INICIALIZACION ============
 document.addEventListener("DOMContentLoaded", () => {
     loadDashboard();
@@ -1298,6 +1400,9 @@ document.addEventListener("DOMContentLoaded", () => {
     loadDomiciliarios();
     setupImageDropZone();
     setupOfferImageDropZone();
+
+    // Inicializar mapa cuando se cargue la seccion
+    setTimeout(initTrackingMap, 500);
 
     // Cargar vendedores solo si es admin
     if (currentUser && currentUser.role === "admin") {
@@ -1310,5 +1415,6 @@ document.addEventListener("DOMContentLoaded", () => {
         loadDeliveries();
         loadOrders();
         loadDomiciliarios();
+        updateMapMarkers();
     }, 30000);
 });

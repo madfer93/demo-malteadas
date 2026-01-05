@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin - Sipote Malteada</title>
     <link rel="stylesheet" href="css/admin.css">
+    <!-- Leaflet para mapas -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 </head>
 <body class="admin-body">
     <header class="admin-header">
@@ -25,6 +28,7 @@
         <div class="header-links">
             <a href="pos.html" class="link-pos">POS</a>
             <a href="kitchen.html" class="link-kitchen">Cocina</a>
+            <a href="domiciliario.html" class="link-driver">App Domis</a>
             <a href="qr-generator.html" class="link-qr">QR Mesas</a>
             <button onclick="logout()" class="link-logout">Salir</button>
         </div>
@@ -228,6 +232,21 @@
                     <span class="stat-label">Total</span>
                 </div>
             </div>
+
+            <!-- MAPA DE TRACKING -->
+            <div class="tracking-section">
+                <div class="tracking-header">
+                    <h3>Ubicacion en Tiempo Real</h3>
+                    <button class="btn-refresh-map" onclick="refreshMap()">Actualizar Mapa</button>
+                </div>
+                <div id="tracking-map"></div>
+                <div class="tracking-legend">
+                    <span class="legend-item available"><span class="dot"></span> Disponible</span>
+                    <span class="legend-item busy"><span class="dot"></span> En ruta</span>
+                </div>
+            </div>
+
+            <h3 style="margin: 30px 0 20px; color: #333;">Listado de Domiciliarios</h3>
             <div class="domiciliarios-grid" id="domiciliarios-grid"></div>
         </section>
 

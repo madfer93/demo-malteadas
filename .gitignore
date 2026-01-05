@@ -1,5 +1,5 @@
 # Archivos de configuracion con credenciales
-js/config.js
+# js/config.js  # Comentado para GitHub Pages demo - descomentar en produccion real
 .env
 .env.local
 

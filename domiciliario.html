@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Domiciliario - Demo Malteada</title>
+    <link rel="stylesheet" href="css/domiciliario.css">
+    <link rel="manifest" href="manifest-driver.json">
+    <meta name="theme-color" content="#667eea">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+</head>
+<body>
+    <!-- LOGIN -->
+    <div id="login-screen" class="screen active">
+        <div class="login-container">
+            <div class="login-header">
+                <span class="logo-icon">🛵</span>
+                <h1>Demo Malteada</h1>
+                <p>App Domiciliarios</p>
+            </div>
+            <form id="login-form" onsubmit="loginDriver(event)">
+                <div class="form-group">
+                    <label>Telefono</label>
+                    <input type="tel" id="driver-phone" required placeholder="300 123 4567">
+                </div>
+                <div class="form-group">
+                    <label>PIN (ultimos 4 digitos de tu cedula)</label>
+                    <input type="password" id="driver-pin" required maxlength="4" placeholder="****" inputmode="numeric">
+                </div>
+                <button type="submit" class="btn-login">Ingresar</button>
+            </form>
+            <p class="login-help">Si no tienes acceso, contacta al administrador</p>
+        </div>
+    </div>
+
+    <!-- APP PRINCIPAL -->
+    <div id="app-screen" class="screen">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="header-info">
+                <span class="status-dot" id="status-dot"></span>
+                <span id="driver-name">Cargando...</span>
+            </div>
+            <div class="header-actions">
+                <button class="btn-icon" onclick="toggleStatus()" id="btn-status" title="Cambiar estado">
+                    <span id="status-icon">🟢</span>
+                </button>
+                <button class="btn-icon" onclick="showIncidentForm()" title="Reportar incidente">⚠️</button>
+                <button class="btn-icon" onclick="logout()" title="Salir">🚪</button>
+            </div>
+        </header>
+
+        <!-- Status Banner -->
+        <div class="status-banner" id="status-banner">
+            <span id="status-text">Disponible</span>
+            <button class="btn-change-status" onclick="toggleStatus()" id="btn-change-status">Marcar Ocupado</button>
+        </div>
+
+        <!-- Tabs -->
+        <nav class="app-tabs">
+            <button class="tab active" data-tab="disponibles" onclick="switchTab('disponibles')">
+                <span class="tab-icon">📦</span>
+                <span class="tab-label">Disponibles</span>
+                <span class="tab-badge" id="badge-disponibles">0</span>
+            </button>
+            <button class="tab" data-tab="mi-pedido" onclick="switchTab('mi-pedido')">
+                <span class="tab-icon">🛵</span>
+                <span class="tab-label">Mi Pedido</span>
+            </button>
+            <button class="tab" data-tab="historial" onclick="switchTab('historial')">
+                <span class="tab-icon">📋</span>
+                <span class="tab-label">Historial</span>
+            </button>
+        </nav>
+
+        <!-- Tab Content: Pedidos Disponibles -->
+        <section class="tab-content active" id="tab-disponibles">
+            <div class="section-header">
+                <h2>Pedidos Disponibles</h2>
+                <button class="btn-refresh" onclick="loadAvailableOrders()">🔄</button>
+            </div>
+            <div class="orders-list" id="available-orders">
+                <div class="empty-state">
+                    <span>📭</span>
+                    <p>No hay pedidos disponibles</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tab Content: Mi Pedido Actual -->
+        <section class="tab-content" id="tab-mi-pedido">
+            <div id="current-order-container">
+                <div class="empty-state">
+                    <span>🛵</span>
+                    <p>No tienes pedido asignado</p>
+                    <small>Toma un pedido de la lista de disponibles</small>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tab Content: Historial -->
+        <section class="tab-content" id="tab-historial">
+            <div class="section-header">
+                <h2>Mis Entregas de Hoy</h2>
+            </div>
+            <div class="orders-list" id="history-orders">
+                <div class="empty-state">
+                    <span>📋</span>
+                    <p>Sin entregas hoy</p>
+                </div>
+            </div>
+            <div class="history-stats" id="history-stats">
+                <div class="stat">
+                    <span class="stat-value" id="stat-entregas">0</span>
+                    <span class="stat-label">Entregas</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-value" id="stat-total">$0</span>
+                    <span class="stat-label">Total</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Location Tracking -->
+        <div class="location-bar" id="location-bar">
+            <span class="location-icon">📍</span>
+            <span class="location-text" id="location-text">Ubicacion desactivada</span>
+            <button class="btn-location" onclick="toggleLocation()" id="btn-location">Activar</button>
+        </div>
+    </div>
+
+    <!-- Modal: Confirmar Tomar Pedido -->
+    <div class="modal" id="modal-tomar">
+        <div class="modal-content">
+            <h3>Tomar Pedido</h3>
+            <div id="modal-tomar-details"></div>
+            <div class="modal-actions">
+                <button class="btn-cancel" onclick="closeModal('modal-tomar')">Cancelar</button>
+                <button class="btn-confirm" onclick="confirmTakeOrder()">Tomar Pedido</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Confirmar Entrega -->
+    <div class="modal" id="modal-entregar">
+        <div class="modal-content">
+            <h3>Confirmar Entrega</h3>
+            <p>¿El pedido fue entregado correctamente?</p>
+            <div class="modal-actions">
+                <button class="btn-cancel" onclick="closeModal('modal-entregar')">Cancelar</button>
+                <button class="btn-confirm" onclick="confirmDelivery()">Si, Entregado</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Reportar Incidente -->
+    <div class="modal" id="modal-incidente">
+        <div class="modal-content modal-large">
+            <h3>Reportar Incidente</h3>
+            <form id="incident-form" onsubmit="submitIncident(event)">
+                <div class="form-group">
+                    <label>Tipo de incidente</label>
+                    <select id="incident-type" required>
+                        <option value="">Selecciona...</option>
+                        <option value="accidente">Accidente de transito</option>
+                        <option value="robo">Robo/Atraco</option>
+                        <option value="vehiculo">Problema con vehiculo</option>
+                        <option value="cliente">Problema con cliente</option>
+                        <option value="direccion">Direccion no encontrada</option>
+                        <option value="otro">Otro</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Descripcion</label>
+                    <textarea id="incident-description" required placeholder="Describe lo que paso..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Foto (opcional)</label>
+                    <div class="photo-upload" id="incident-photo-zone">
+                        <input type="file" id="incident-photo" accept="image/*" capture="environment" onchange="previewIncidentPhoto(event)">
+                        <div class="photo-preview" id="incident-preview">
+                            <span>📷</span>
+                            <p>Toca para tomar foto</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn-cancel" onclick="closeModal('modal-incidente')">Cancelar</button>
+                    <button type="submit" class="btn-confirm btn-danger">Enviar Reporte</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div id="toast-container"></div>
+
+    <script src="js/config.js"></script>
+    <script src="js/supabase.js"></script>
+    <script src="js/domiciliario.js"></script>
+</body>
+</html>

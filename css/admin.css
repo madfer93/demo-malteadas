@@ -69,6 +69,7 @@
 
 .link-pos { background: #25D366; }
 .link-kitchen { background: #2196F3; }
+.link-driver { background: #667eea; }
 .link-qr { background: #9c27b0; }
 .link-store { background: rgba(255,255,255,0.2); border: 1px solid white; }
 
@@ -1381,5 +1382,127 @@
 
     .stat-mini {
         width: 100%;
+    }
+}
+
+/* ============ MAPA DE TRACKING ============ */
+.tracking-section {
+    background: white;
+    border-radius: 20px;
+    padding: 20px;
+    margin-bottom: 25px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+}
+
+.tracking-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.tracking-header h3 {
+    color: #333;
+    font-size: 1.1em;
+}
+
+.btn-refresh-map {
+    background: #667eea;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 0.85em;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.btn-refresh-map:hover {
+    background: #5a6fd6;
+}
+
+#tracking-map {
+    width: 100%;
+    height: 350px;
+    border-radius: 15px;
+    overflow: hidden;
+    border: 2px solid #eee;
+}
+
+.tracking-legend {
+    display: flex;
+    gap: 20px;
+    margin-top: 15px;
+    justify-content: center;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.9em;
+    color: #666;
+}
+
+.legend-item .dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+}
+
+.legend-item.available .dot {
+    background: #66bb6a;
+}
+
+.legend-item.busy .dot {
+    background: #42a5f5;
+}
+
+/* Estilos para marcadores del mapa */
+.driver-marker {
+    background: white;
+    border-radius: 50%;
+    padding: 5px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    font-size: 1.5em;
+    text-align: center;
+    line-height: 1;
+}
+
+.driver-popup {
+    text-align: center;
+}
+
+.driver-popup h4 {
+    margin: 0 0 5px;
+    color: #333;
+}
+
+.driver-popup .status {
+    font-size: 0.85em;
+    padding: 3px 10px;
+    border-radius: 10px;
+    display: inline-block;
+    margin-bottom: 5px;
+}
+
+.driver-popup .status.available {
+    background: #e8f5e9;
+    color: #2e7d32;
+}
+
+.driver-popup .status.busy {
+    background: #e3f2fd;
+    color: #1565c0;
+}
+
+.driver-popup .last-update {
+    font-size: 0.8em;
+    color: #999;
+}
+
+@media (max-width: 768px) {
+    #tracking-map {
+        height: 250px;
     }
 }

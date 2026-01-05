@@ -44,8 +44,103 @@
         <h3>Tu Carrito</h3>
         <div id="mini-cart-items"></div>
         <div id="mini-cart-total">Total: $0</div>
-        <button id="checkout-mini" onclick="checkout()">Enviar por WhatsApp</button>
+        <button id="checkout-mini" onclick="showCheckoutModal()">Realizar Pedido</button>
         <button id="clear-cart" onclick="clearCart()">Vaciar Carrito</button>
+    </div>
+
+    <!-- Modal de Checkout -->
+    <div id="checkout-modal" class="checkout-modal" style="display:none;">
+        <div class="checkout-content">
+            <button class="close-checkout" onclick="closeCheckoutModal()">&times;</button>
+            <h2>Finalizar Pedido</h2>
+
+            <!-- Tipo de pedido -->
+            <div class="checkout-section">
+                <h3>Tipo de pedido</h3>
+                <div class="order-type-buttons">
+                    <button class="order-type-btn" data-type="mesa" onclick="selectOrderType('mesa')">
+                        <span class="order-icon">🍽️</span>
+                        <span>Para Mesa</span>
+                    </button>
+                    <button class="order-type-btn" data-type="llevar" onclick="selectOrderType('llevar')">
+                        <span class="order-icon">🥡</span>
+                        <span>Para Llevar</span>
+                    </button>
+                    <button class="order-type-btn" data-type="domicilio" onclick="selectOrderType('domicilio')">
+                        <span class="order-icon">🛵</span>
+                        <span>Domicilio</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Formulario segun tipo -->
+            <form id="checkout-form" onsubmit="processCheckout(event)">
+                <!-- Para mesa -->
+                <div id="mesa-fields" class="checkout-fields" style="display:none;">
+                    <div class="form-group">
+                        <label>Numero de Mesa</label>
+                        <input type="number" id="checkout-mesa" min="1" max="50" placeholder="Ej: 5">
+                    </div>
+                </div>
+
+                <!-- Para llevar -->
+                <div id="llevar-fields" class="checkout-fields" style="display:none;">
+                    <div class="form-group">
+                        <label>Tu Nombre</label>
+                        <input type="text" id="checkout-nombre-llevar" placeholder="Para llamarte cuando este listo">
+                    </div>
+                    <div class="form-group">
+                        <label>Telefono (opcional)</label>
+                        <input type="tel" id="checkout-tel-llevar" placeholder="300 123 4567">
+                    </div>
+                </div>
+
+                <!-- Para domicilio -->
+                <div id="domicilio-fields" class="checkout-fields" style="display:none;">
+                    <div class="form-group">
+                        <label>Tu Nombre *</label>
+                        <input type="text" id="checkout-nombre" required placeholder="Nombre completo">
+                    </div>
+                    <div class="form-group">
+                        <label>Telefono *</label>
+                        <input type="tel" id="checkout-telefono" required placeholder="300 123 4567">
+                    </div>
+                    <div class="form-group">
+                        <label>Direccion de entrega *</label>
+                        <textarea id="checkout-direccion" required placeholder="Calle, numero, barrio, referencias..."></textarea>
+                    </div>
+                </div>
+
+                <!-- Notas -->
+                <div class="form-group" id="notas-group" style="display:none;">
+                    <label>Notas adicionales</label>
+                    <textarea id="checkout-notas" placeholder="Sin cebolla, extra salsa, etc."></textarea>
+                </div>
+
+                <!-- Resumen -->
+                <div class="checkout-summary">
+                    <h3>Resumen</h3>
+                    <div id="checkout-items"></div>
+                    <div class="checkout-total" id="checkout-total-display">Total: $0</div>
+                </div>
+
+                <button type="submit" id="btn-confirmar" class="btn-confirmar" disabled>
+                    Selecciona tipo de pedido
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Confirmacion de pedido -->
+    <div id="order-confirmation" class="checkout-modal" style="display:none;">
+        <div class="confirmation-content">
+            <div class="success-icon">✓</div>
+            <h2>Pedido Recibido!</h2>
+            <p class="order-number">Pedido #<span id="confirm-order-id"></span></p>
+            <p id="confirm-message"></p>
+            <div class="confirm-details" id="confirm-details"></div>
+            <button onclick="closeConfirmation()" class="btn-confirmar">Aceptar</button>
+        </div>
     </div>
 
     <!-- Boton flotante del carrito -->

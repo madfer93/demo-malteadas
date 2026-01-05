@@ -28,8 +28,9 @@ CREATE POLICY "products_all" ON products
 DROP POLICY IF EXISTS "offers_select" ON offers;
 DROP POLICY IF EXISTS "offers_all" ON offers;
 
+-- Cualquiera puede ver ofertas
 CREATE POLICY "offers_select" ON offers
-    FOR SELECT USING (active = true);
+    FOR SELECT USING (true);
 
 CREATE POLICY "offers_all" ON offers
     FOR ALL USING (true);

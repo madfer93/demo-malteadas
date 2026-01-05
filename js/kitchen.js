@@ -68,14 +68,41 @@ function renderOrderCard(order, type) {
     const time = order.created_at ? new Date(order.created_at).toLocaleTimeString("es-CO", { hour: "2-digit", minute: "2-digit" }) : "";
     const elapsed = getElapsedTime(order.created_at);
 
+    // Determinar tipo de pedido y badge
+    let orderTypeBadge = "";
+    let orderTypeClass = "";
+
+    if (order.delivery_address || order.order_type === "domicilio") {
+        orderTypeBadge = "<div class='order-type-badge domicilio'>🛵 DOMICILIO</div>";
+        orderTypeClass = "is-delivery";
+    } else if (order.order_type === "llevar") {
+        orderTypeBadge = "<div class='order-type-badge llevar'>🥡 PARA LLEVAR</div>";
+        orderTypeClass = "is-takeout";
+    } else if (order.table_number) {
+        orderTypeBadge = "<div class='order-type-badge mesa'>🍽️ MESA " + order.table_number + "</div>";
+        orderTypeClass = "is-table";
+    } else {
+        orderTypeBadge = "<div class='order-type-badge pos'>🏪 MOSTRADOR</div>";
+        orderTypeClass = "is-counter";
+    }
+
+    // Parsear items si existen
     let items = "";
+    if (order.notes) {
+        // Si notes contiene los items (ej: "2x Malteada, 1x Hamburguesa")
+        items = order.notes.split(",").map(i => "<li>" + i.trim() + "</li>").join("");
+    }
     try {
         const parsed = typeof order.items === "string" ? JSON.parse(order.items) : order.items;
-        if (Array.isArray(parsed)) {
+        if (Array.isArray(parsed) && parsed.length > 0) {
             items = parsed.map(i => "<li>" + (i.quantity || 1) + "x " + (i.name || i.producto || "Item") + "</li>").join("");
         }
     } catch (e) {
-        items = "<li>Ver detalles en admin</li>";
+        // Usar notes como items
+    }
+
+    if (!items) {
+        items = "<li>Ver detalles</li>";
     }
 
     let buttons = "";
@@ -87,15 +114,26 @@ function renderOrderCard(order, type) {
         buttons = "<button class='btn-delivered' onclick='updateStatus(" + order.id + ", \"entregado\")'>Entregado</button>";
     }
 
-    return "<div class='order-card " + type + "'>" +
+    // Info del cliente para domicilios
+    let customerInfo = "";
+    if (order.customer_name) {
+        customerInfo += "<div class='order-customer'>👤 " + order.customer_name + "</div>";
+    }
+    if (order.customer_phone && (order.delivery_address || order.order_type === "domicilio")) {
+        customerInfo += "<div class='order-phone'>📱 " + order.customer_phone + "</div>";
+    }
+    if (order.delivery_address) {
+        customerInfo += "<div class='order-address'>📍 " + order.delivery_address + "</div>";
+    }
+
+    return "<div class='order-card " + type + " " + orderTypeClass + "'>" +
+        orderTypeBadge +
         "<div class='order-header'>" +
             "<span class='order-number'>#" + order.id + "</span>" +
             "<span class='order-time'>" + time + "</span>" +
         "</div>" +
-        (order.table_number ? "<div class='order-table'>Mesa " + order.table_number + "</div>" : "") +
-        (order.customer_name ? "<div class='order-customer'>" + order.customer_name + "</div>" : "") +
+        customerInfo +
         "<ul class='order-items'>" + items + "</ul>" +
-        (order.notes ? "<div class='order-notes'>" + order.notes + "</div>" : "") +
         "<div class='order-elapsed'>" + elapsed + "</div>" +
         "<div class='order-actions'>" + buttons + "</div>" +
     "</div>";

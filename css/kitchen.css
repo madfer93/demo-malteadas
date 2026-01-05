@@ -105,6 +105,75 @@
     border-left-color: #66bb6a;
 }
 
+/* Badges de tipo de pedido */
+.order-type-badge {
+    display: inline-block;
+    padding: 8px 15px;
+    border-radius: 20px;
+    font-weight: bold;
+    font-size: 0.95em;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.order-type-badge.domicilio {
+    background: linear-gradient(135deg, #25D366, #128C7E);
+    color: white;
+    animation: pulse 2s infinite;
+}
+
+.order-type-badge.llevar {
+    background: linear-gradient(135deg, #ff9800, #f57c00);
+    color: white;
+}
+
+.order-type-badge.mesa {
+    background: linear-gradient(135deg, #e94560, #c73e54);
+    color: white;
+}
+
+.order-type-badge.pos {
+    background: linear-gradient(135deg, #5c6bc0, #3f51b5);
+    color: white;
+}
+
+@keyframes pulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.4); }
+    50% { box-shadow: 0 0 0 10px rgba(37, 211, 102, 0); }
+}
+
+/* Estilos adicionales segun tipo */
+.order-card.is-delivery {
+    border-left-color: #25D366 !important;
+    background: linear-gradient(135deg, #0f3460 0%, #1a4a3a 100%);
+}
+
+.order-card.is-takeout {
+    border-left-color: #ff9800 !important;
+}
+
+.order-card.is-table {
+    border-left-color: #e94560 !important;
+}
+
+/* Info del cliente */
+.order-phone {
+    color: #aaa;
+    font-size: 0.9em;
+    margin-bottom: 5px;
+}
+
+.order-address {
+    background: rgba(37, 211, 102, 0.2);
+    color: #25D366;
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-size: 0.9em;
+    margin-bottom: 10px;
+    border-left: 3px solid #25D366;
+}
+
 .order-header {
     display: flex;
     justify-content: space-between;

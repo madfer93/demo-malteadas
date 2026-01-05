@@ -16,7 +16,11 @@ class QueryBuilder {
 
     select(columns = '*') {
         this.columns = columns;
-        this.method = 'GET';
+        // Solo cambiar a GET si no hay body (no es insert/update)
+        if (!this.body) {
+            this.method = 'GET';
+        }
+        this._returnData = true;
         return this;
     }
 
